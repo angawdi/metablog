@@ -1,20 +1,40 @@
 var express = require('express');
 var router = express.Router();
+var db = require('../models');
 
 router.get('/', function(req, res){
   res.render('articles/index');
 });
 
 router.get('/new', function(req, res){
-  res.render('articles/new', {authors: []});
+ 	db.author.findAll().then(function(allAuthors){
+ 		res.render('articles/new', {authors: allAuthors});
+ 	}).catch(function(err){
+ 		console.log(err);
+ 		res.send('oops');
+ 	});
 });
 
 router.get('/:id', function(req, res){
-  res.send('article show page goes here');
+	db.article.findOne({
+		where: {id: req.params.id},
+		include: [db.author]
+	}).then(function(foundArticle){
+		res.render('articles/show', {article: foundArticle});
+	}).catch(function(err){
+		console.log(err);
+		res.send('oops');
+	});
 });
 
 router.post('/', function(req, res){
-  res.send('articles POST route reached');
+	console.log(req.body);
+  db.article.create(req.body).then(function(createArticle){
+  	res.redirect('/articles/' + createArticle.id);
+  }).catch(function(err){
+  	console.log(err);
+  	res.send('Nooooo');
+  });
 });
 
 module.exports = router;
