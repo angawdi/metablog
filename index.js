@@ -14,10 +14,16 @@ app.use(bodyParser.urlencoded({extended: false}));
 // Include controllers/routers
 app.use('/articles', require('./controllers/articles'));
 app.use('/authors', require('./controllers/authors'));
-
+app.use('/comments', require('./controllers/comments'));
 // Define routes
 app.get('/', function(req, res){
   res.render('home');
+});
+
+// Define routes
+app.get('*', function(req, res){
+	console.log('wildcard route');
+  res.render('error');
 });
 
 // Hey! Listen!

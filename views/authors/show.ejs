@@ -11,3 +11,17 @@
 		</p>
 	</div>
 </div>
+
+<div class="row">
+	<div class="col-12">
+		<h3>Articles by <%= author.name %></h3>
+		<% author.articles.forEach(function(article){%>
+	<div>
+		<hr>
+		<a href="/articles/<%=article.id%>">
+			<%= article.title%>
+		</a>
+	</div>
+	<% });%>
+	</div>
+</div>

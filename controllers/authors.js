@@ -7,7 +7,7 @@ router.get('/', function(req, res){
 		res.render('authors/index', {authors: allAuthors});
 	}).catch(function(err){
 		console.log(err);
-		res.send('bad thing happend');
+		res.render('error');
 	})
 });
 
@@ -17,11 +17,12 @@ router.get('/new', function(req, res){
 
 router.get('/:id', function(req, res){
   db.author.findOne({
-  	where: { id: req.params.id }
+  	where: { id: req.params.id },
+    include: [db.article]
   }).then(function(foundAuthor){
   	res.render('authors/show', {author: foundAuthor});
   }).catch(function(err){
-  	res.send('can\'t find that author!');
+  	res.render('error');
   });
 });
 
@@ -31,7 +32,7 @@ router.post('/', function(req, res){
   	res.redirect('/authors/' + createdAuthor.id);
   }).catch(function(err){
   	console.log(err);
-  	res.send('derp');
+  	res.render('error');
   });
 });
 
